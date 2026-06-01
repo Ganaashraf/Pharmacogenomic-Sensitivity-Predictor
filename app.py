@@ -14,17 +14,17 @@ st.set_page_config(
 # Load the trained assets securely with error handling
 @st.cache_resource
 def load_assets():
-    # Check if files exist before trying to load them
-    if not os.path.exists('gdsc_model.pkl'):
-        st.error("Error: 'gdsc_model.pkl' not found. Please ensure it is uploaded to GitHub.")
-        st.stop()
-        
     model = joblib.load('gdsc_model.pkl')
     scaler = joblib.load('gdsc_scaler.pkl')
     pathway_encoder = joblib.load('pathway_encoder.pkl')
-    return model, scaler, pathway_encoder
+    selector = joblib.load('gdsc_selector.pkl') # <--- WE ADDED THE SELECTOR HERE
+    return model, scaler, pathway_encoder, selector
 
-model, scaler, pathway_encoder = load_assets()
+try:
+    model, scaler, pathway_encoder, selector = load_assets()
+except Exception as e:
+    st.error("Error loading model assets. Make sure gdsc_selector.pkl is uploaded!")
+    st.stop()
 
 # Main UI Header
 st.title("🧬 Pharmacogenomic Sensitivity Predictor")
@@ -54,11 +54,14 @@ if st.sidebar.button("Predict Sensitivity", type="primary"):
     efficacy_index = auc / (rmse + 0.0001)
     pathway_encoded = pathway_encoder.transform([selected_pathway])[0]
     
-    # Format the input data correctly for the model
+    # Format the input data correctly for the model (All 8 features)
     input_data = np.array([[min_conc, max_conc, auc, rmse, z_score, efficacy_index, pathway_encoded, drug_id]])
     
-    # Scale the input
-    input_scaled = scaler.transform(input_data)
+    # Apply the selector to drop the 2 least important features (Now down to 6)
+    input_selected = selector.transform(input_data)
+    
+    # Scale the 6 remaining features
+    input_scaled = scaler.transform(input_selected)
     
     # Run Prediction
     prediction = model.predict(input_scaled)
