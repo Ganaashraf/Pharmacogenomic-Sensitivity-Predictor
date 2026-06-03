@@ -5,3 +5,4 @@ https://www.kaggle.com/datasets/samiraalipour/genomics-of-drug-sensitivity-in-ca
 # APP’s link:
 https://pharmacogenomic-sensitivity-predictor-nxv9spuuhecfyzvqdyxhug.streamlit.app/
 # video's link
+https://drive.google.com/file/d/1DStIdecY6obOjjWQwX5yP-ZVjawS1deD/view?usp=sharing
