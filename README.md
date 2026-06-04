@@ -8,7 +8,11 @@ https://pharmacogenomic-sensitivity-predictor-nxv9spuuhecfyzvqdyxhug.streamlit.a
 https://drive.google.com/file/d/1DStIdecY6obOjjWQwX5yP-ZVjawS1deD/view?usp=sharing
 # Required Libraries :
 streamlit — builds and runs the interactive web application interface
+
 pandas — loads and manipulates the input data into structured dataframes
+
 numpy — handles numerical computations and array operations
+
 scikit-learn==1.6.1 — provides the ML classifier, StandardScaler for feature normalization, SelectKBest for feature selection, and LabelEncoder for pathway encoding
+
 pickle (built-in) — loads the pre-trained model and fitted preprocessing artifacts (.pkl files) at inference time
